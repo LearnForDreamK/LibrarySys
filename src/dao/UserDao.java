@@ -10,7 +10,7 @@ import java.util.List;
 import model.Book;
 import model.User;
 import utils.JDBCUtil;
-//用户的操作 
+
 public class UserDao {
 	private Connection conn = null;
 	private PreparedStatement ps = null;
