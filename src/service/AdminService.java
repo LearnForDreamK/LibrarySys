@@ -51,7 +51,7 @@ public class AdminService extends UserService {
 
 	/**
 	 * - 根据图书编号删除图书
-	 * @param string
+	 * @param
 	 */
 	public String deleteByNum(String num) {
 		return adminDao.deleteByNum(num);
@@ -59,7 +59,7 @@ public class AdminService extends UserService {
 
 	/**
 	 * - 修改图书
-	 * @param book
+	 * @param
 	 */
 	public String update(Book book) {
 		String msg = "";
@@ -71,6 +71,18 @@ public class AdminService extends UserService {
 			msg = adminDao.updateBook(book);
 		}
 		return msg;
+	}
+
+	public String[] takeTypes(){
+		return adminDao.takeTypes();
+	}
+
+	public boolean insertBooksTpye(String typename){
+		return adminDao.insertBooksTpye(typename);
+	}
+
+	public boolean deleteBooksTpye(String typename){
+		return adminDao.deleteBooksTpye(typename);
 	}
 
 }

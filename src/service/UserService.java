@@ -89,6 +89,10 @@ public class UserService {
 			case 3:
 				books = userDao.findAllBook();
 				break;
+			case 4:
+				books=userDao.findBookByType(findMsg);
+				break;
+
 			}
 		}
 		

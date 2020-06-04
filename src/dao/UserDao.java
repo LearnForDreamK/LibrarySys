@@ -127,6 +127,27 @@ public class UserDao {
 		}
 		return books;
 	}
+
+	public List<Book> findBookByType(String type) {
+		List<Book> books = new ArrayList<>();
+		try {
+			String sql = "select * from t_books where borrow = ?";
+			conn = JDBCUtil.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, type);
+			rs = ps.executeQuery();
+
+			while(rs.next()) {
+				books.add(new Book(rs.getInt("id"),rs.getString("bookname"),rs.getString("author"),
+						rs.getLong("number"),rs.getString("borrow"),rs.getString("location")));
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCUtil.release(rs, ps, conn);
+		}
+		return books;
+	}
 	
 	public List<Book> findAllBook() {
 		List<Book> books = new ArrayList<>();

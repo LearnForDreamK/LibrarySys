@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Admin;
 import model.Book;
@@ -57,7 +59,7 @@ public class AdminDao extends UserDao {
 	public String addBook(Book book) {
 		String msg = "";
 		try {
-			String sql = "insert into t_books (bookname,author,number,borrow,location) values (?,?,?,?,?)";
+			String sql = "insert into t_books (bookname,author,id,borrow,location) values (?,?,?,?,?)";
 			conn = JDBCUtil.getConnection();
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, book.getBookname());
@@ -89,7 +91,7 @@ public class AdminDao extends UserDao {
 	public String deleteByNum(String num) {
 		String msg = "";
 		try {
-			String sql = "delete from t_books where number = ?";
+			String sql = "delete from t_books where id = ?";
 			conn = JDBCUtil.getConnection();
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, num);
@@ -118,7 +120,7 @@ public class AdminDao extends UserDao {
 	public String updateBook(Book book) {
 		String msg = "";
 		try {
-			String sql = "update t_books set bookname=?, author=?, number=?, borrow=?, location=? where id=?";
+			String sql = "update t_books set bookname=?, author=?, id=?, borrow=?, location=? where id=?";
 			conn = JDBCUtil.getConnection();
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, book.getBookname());
@@ -144,4 +146,78 @@ public class AdminDao extends UserDao {
 		}
 		return msg;
 	}
+
+	public String[] takeTypes(){
+		List<String> types=new ArrayList<>();
+		try {
+			String sql = "select * from t_bookstype";
+			conn = JDBCUtil.getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				String typename=rs.getString("typename");
+				types.add(typename);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCUtil.release(rs, ps, conn);
+		}
+
+		return types.toArray(new String[types.size()]);
+
+	}
+
+
+	public boolean insertBooksTpye(String typename){
+		Boolean result=false;
+		try {
+			String sql = "insert into t_bookstype (typename) values (?)";
+			conn = JDBCUtil.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, typename);
+			int flag = ps.executeUpdate();
+			if (flag == 1) {
+				result = true;
+			}else {
+				result=false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCUtil.release(ps, conn);
+		}
+		return result;
+	}
+
+	public boolean deleteBooksTpye(String typename){
+		Boolean result=false;
+		try {
+			String sql = "delete from t_bookstype where typename=?";
+			conn = JDBCUtil.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, typename);
+			int flag = ps.executeUpdate();
+			if (flag == 1) {
+				result = true;
+			}else {
+				result=false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCUtil.release(ps, conn);
+		}
+		return result;
+	}
+
 }
