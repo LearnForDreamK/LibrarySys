@@ -49,7 +49,7 @@ public class AdminView {
 	private JPanel topPanel = new JPanel(); //顶部面板
 	private JLabel topAdminMsg = new JLabel(); //管理员信息
 	private JComboBox<String> topFindBy = new JComboBox<String>(); //下拉列表
-	private String items[] = {"通过书名检索", "通过作者检索", "通过编号检索","检索所有图书"};
+	private String items[] = {"通过书名检索", "通过作者检索", "通过编号检索","检索所有图书","按类别查询"};
 	private JTextField topInput = new JTextField(); //检索输入框
 	private JLabel topTime = new JLabel(); //用来显示登录时间
 	//侧边面板和组件
@@ -58,21 +58,26 @@ public class AdminView {
 	private JButton sideAddBtn = new JButton("添加图书"); //增
 	private JButton sideDeleteBtn = new JButton("删除图书"); //删
 	private JButton sideUpdateBtn = new JButton("修改图书"); //改
+	private JButton sideUpdateBtn1 = new JButton("增加类别"); //增加类别
 	//功能面板
 	private JPanel addPanel = new JPanel();
 	private JPanel deletePanel = new JPanel();
 	
 	private JScrollPane findPanel = new JScrollPane(); //检索图书表格面板
 	private JPanel updataPanel = new JPanel();
+	private JPanel addPanel1=new JPanel();
+
 	private JLabel functionMsg = new JLabel(); //当前正在使用的什么功能？
 	//添加功能组件
 	private JLabel addName = new JLabel("图书名称");
 	private JLabel addAuthor = new JLabel("图书作者");
 	private JLabel addNumber = new JLabel("图书编号");
 	private JLabel addLocation = new JLabel("图书位置");
-	private JLabel addBorrow = new JLabel("借阅信息");
+	private JLabel addBorrow = new JLabel("图书类别");
 	private JComboBox<String> addBorrowText = new JComboBox<String>();
 	private String[] addBorrowList = {"可以借阅","已被借出"};
+
+
 	private JTextField addNameText = new JTextField(30);
 	private JTextField addAuthorText = new JTextField(30);
 	private JTextField addNumberText = new JTextField(30);
@@ -82,7 +87,7 @@ public class AdminView {
 	//查找功能组件
 	private JLabel findTitle = new JLabel("图书信息"); //表格标题
 	private JTable findTable = new JTable();
-	String[] findTableTitle = new String[]{"图书名称","图书作者","图书编号","借阅信息","存放位置"};//表格头字段
+	String[] findTableTitle = new String[]{"图书名称","图书作者","图书编号","图书类别","存放位置"};//表格头字段
 	/**
 	 * 	如何实现动态获取图书列表，使二维数组大小与获取图书列表的数量一致？？？
 	 */
@@ -96,6 +101,16 @@ public class AdminView {
 	private JLabel updateNum = new JLabel("请输入修改图书的编号：");
 	private JTextField updateNumText0 = new JTextField(30);
 	private JButton updateFindBtn = new JButton("搜索");
+
+	private JLabel updateNum1 = new JLabel("请输入增加的类别：");
+	private JTextField updateNumText01 = new JTextField(30);
+	private JButton updateFindBtn1 = new JButton("增加");
+
+	private JLabel updateNum2 = new JLabel("请输入删除的类别：");
+	private JTextField updateNumText02 = new JTextField(30);
+	private JButton updateFindBtn2 = new JButton("删除");
+
+
 	private JButton updateBtn = new JButton("修改");
 	private JTextField updateNameText = new JTextField(30);
 	private JTextField updateAuthorText = new JTextField(30);
@@ -199,6 +214,7 @@ public class AdminView {
 		sidePanel.add(sideAddBtn);
 		sidePanel.add(sideDeleteBtn);
 		sidePanel.add(sideUpdateBtn);
+		sidePanel.add(sideUpdateBtn1);
 		c.add(sidePanel);
 		sidePanel.setVisible(true);
 	}
@@ -223,7 +239,10 @@ public class AdminView {
 		addAuthorText.setBounds(220, 92, 300, 25);
 		addNumberText.setBounds(220, 122, 300, 25);
 		addLocationText.setBounds(220, 152, 300, 25);
-		ComboBoxModel<String> model = new DefaultComboBoxModel<String>(addBorrowList);
+
+
+		ComboBoxModel<String> model = new DefaultComboBoxModel<String>(adminService.takeTypes());
+
 		addBorrowText.setModel(model);
 		addBorrowText.setBounds(220, 182, 80, 25);
 		
@@ -292,29 +311,61 @@ public class AdminView {
 		deletePanel.add(deletenumBtn);
 		return deletePanel;
 	}
-	
+
+
 	/**
 	 * 修改功能面板：700*700
 	 */
 	private JPanel createUpdataPanel() {
-		
+
 		updataPanel.setLayout(null);
 		updataPanel.setBounds(100, 100, 700, 700);
-		
+
 		//功能提示字体
 		setFunctionMsg("您当前正在使用修改功能哦...");
-		
+
 		//搜索第一
 		updateNum.setBounds(50, 70, 200, 30);
 		updateNumText0.setBounds(200, 70, 300, 25);
 		updateFindBtn.setBounds(520, 70, 60, 25);
-		
+
 		updataPanel.add(functionMsg);
 		updataPanel.add(updateNum);
 		updataPanel.add(updateNumText0);
 		updataPanel.add(updateFindBtn);
 		return updataPanel;
 	}
+
+	//增加类别
+	private JPanel createAdd1Panel() {
+
+		addPanel1.setLayout(null);
+		addPanel1.setBounds(100, 100, 700, 700);
+
+		//功能提示字体
+		setFunctionMsg("增加类别");
+
+		//搜索第一
+		updateNum1.setBounds(50, 70, 200, 30);
+		updateNumText01.setBounds(200, 70, 300, 25);
+		updateFindBtn1.setBounds(520, 70, 60, 25);
+
+		updateNum2.setBounds(50, 100, 200, 30);
+		updateNumText02.setBounds(200, 100, 300, 25);
+		updateFindBtn2.setBounds(520, 100, 60, 25);
+
+		addPanel1.add(functionMsg);
+
+		addPanel1.add(updateNum1);
+		addPanel1.add(updateNumText01);
+		addPanel1.add(updateFindBtn1);
+
+		addPanel1.add(updateNum2);
+		addPanel1.add(updateNumText02);
+		addPanel1.add(updateFindBtn2);
+		return addPanel1;
+	}
+
 	
 	/**
 	 * 主要面板：功能实现区
@@ -373,6 +424,16 @@ public class AdminView {
 				createMainPanel(createUpdataPanel());
 			}
 		});
+
+		sideUpdateBtn1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				setVisibleFalse();
+
+				createMainPanel(createAdd1Panel());
+			}
+		});
 	}
 	
 	/**
@@ -419,6 +480,11 @@ public class AdminView {
 					books = adminService.findBooks(findMsg, 3);
 					System.out.println("检索所有图书");
 				}
+				if (topFindBy.getSelectedItem().equals(items[4])) {
+					//检索所有图书，3
+					books = adminService.findBooks(findMsg, 4);
+					System.out.println("按类别查询");
+				}
 				
 				if(books != null) {
 					//将检索的书目列表展示到表格中
@@ -449,7 +515,7 @@ public class AdminView {
 				//获取数据
 				String bookname = "";
 				String author = "";
-				Long number = -1l;
+				Long number = -1L;
 				String location = "";
 				String borrow = "";
 				//图书编号不能有空格或者是空，否则赋值时错误。LONG类型的
@@ -534,7 +600,33 @@ public class AdminView {
 				}
 			}
 		});
-		
+
+
+		updateFindBtn1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//增加图书类别
+				boolean isSuccess=adminService.insertBooksTpye(updateNumText01.getText());
+				if (isSuccess) {
+					Tools.createMsgDialog(adminView, "增加成功");
+				}else {
+					Tools.createMsgDialog(adminView, "增加失败");
+				}
+			}
+		});
+
+		updateFindBtn2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//删除图书类别
+				boolean isSuccess=adminService.deleteBooksTpye(updateNumText02.getText());
+				if (isSuccess) {
+					Tools.createMsgDialog(adminView, "删除成功");
+				}else {
+					Tools.createMsgDialog(adminView, "删除失败");
+				}
+			}
+		});
 		//修改按钮
 		updateBtn.addActionListener(new ActionListener() {
 			@Override
@@ -564,11 +656,13 @@ public class AdminView {
 		deletePanel.setVisible(false);
 		findPanel.setVisible(false);
 		updataPanel.setVisible(false);
-		
+		addPanel1.setVisible(false);
+
 		c.remove(addPanel);
 		c.remove(deletePanel);
 		c.remove(findPanel);
 		c.remove(updataPanel);
+		c.remove(addPanel1);
 	}
 	
 	/**
@@ -587,7 +681,7 @@ public class AdminView {
 		JLabel author = new JLabel("作者："+book.getAuthor());
 		JLabel num = new JLabel("编号："+book.getNum().toString());
 		JLabel location = new JLabel("位置："+book.getLocation());
-		JLabel borrow = new JLabel("借阅信息："+book.getBorrow());
+		JLabel borrow = new JLabel("图书类别："+book.getBorrow());
 		
 		//按钮
 		//在顶部
@@ -620,8 +714,8 @@ public class AdminView {
 		JLabel author = new JLabel("作者：");
 		JLabel num = new JLabel("编号：");
 		JLabel location = new JLabel("位置：");
-		JLabel borrow = new JLabel("借阅信息：");
-		ComboBoxModel<String> model = new DefaultComboBoxModel<String>(addBorrowList);
+		JLabel borrow = new JLabel("图书类别：");
+		ComboBoxModel<String> model = new DefaultComboBoxModel<String>(adminService.takeTypes());
 		updateBorrowText.setModel(model);
 		
 		//设置搜索的图书信息
@@ -630,7 +724,7 @@ public class AdminView {
 		updateAuthorText.setText(book.getAuthor());
 		updateNumText.setText(book.getNum().toString());
 		updateLocationText.setText(book.getLocation());
-		if (book.getBorrow().equals("已被借出")) {
+		if (book.getBorrow().equals("1")) {
 			updateBorrowText.setSelectedIndex(1);
 		}
 		
